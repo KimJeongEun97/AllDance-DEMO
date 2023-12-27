@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/indexfragments.css">
+    <link rel="stylesheet" href="css/correction.css">
+    <script th:inline="javascript">
+        $(function () {
+            //메시지 출력
+            let m = [[${msg}]];
+            if (m != null) {
+                alert(m);
+            } //복사하여 index.html에도 넣기
+        });
+    </script>
+</head>
+<body class="correctionbackground">
+<header>
+    <th:block th:insert="~{fragments::header(${session.member})}"/>
+</header>
+<section>
+    <div class="content">
+        <form th:action="@{updateReplyProc}" class="write-form"
+               method="post" enctype="multipart/form-data">
+            <h2 class="login-header" style="color: white">댓글 수정</h2>
+            <input type="hidden" name="r_num" th:value="${reply.r_num}">
+            <input type="hidden" name="r_dnum" th:value="${reply.r_dnum}">
+            <textarea rows="10" name="r_contents"
+                      class="write-input ta" th:text="${reply.r_contents}"></textarea>
+            <div class="correction_btn-area">
+                <input type="submit" class="login-btn" value="수정">
+                <input type="reset" class="login-btn" value="글 복원">
+                <input type="button" class="login-btn" id="backbtn" value="취소">
+            </div>
+        </form>
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{fragments::footer}"/>
+</footer>
+</body>
+<script th:inline="javascript">
+    <!--뒤로가기-->
+    $("#backbtn").click(function () {
+        let dnum = [[${dance.d_num}]];
+        location.href = `/danceDetail?d_num=${dnum}`;
+    });
+</script>
+</html>

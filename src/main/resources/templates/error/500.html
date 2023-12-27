@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" , initioal-scale="1">
+    <title>Dance Board</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/indexfragments.css">
+    <link rel="stylesheet" href="css/error.css">
+    <script th:inline="javascript">
+        $(function () {
+            //메시지 출력
+            let m = [[${msg}]];
+            if (m != null) {
+                alert(m);
+            } //복사하여 index.html에도 넣기
+        });
+    </script>
+</head>
+<body class="errorbackground">
+<header>
+    <th:block th:insert="~{fragments::header(${session.member})}"/>
+</header>
+<section>
+    <div class="content">
+        <div class="write-form">
+            <div class="write-form" style="color: white; text-align: left">
+                <h2>서버에 문제가 있습니다</h2>
+                <p th:text="'경로 : '+${path}"></p>
+                <p th:text="'상태 : '+${status}"></p>
+                <p th:text="'발생시간 : '+${timestamp}"></p>
+                <p th:text="'오류 : '+${error}"></p>
+                <p th:text="'예외 사항 : '+${exception}"></p>
+                <p th:text="'오류 : '+${message}"></p>
+            </div>
+        </div>
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{fragments::footer}"/>
+</footer>
+</body>
+</html>

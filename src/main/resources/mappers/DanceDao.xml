@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aidata.alldance.dao.DanceDao">
+    <insert id="insertDance" parameterType="danceDto"
+    useGeneratedKeys="true" keyProperty="b_num">
+        <selectKey keyProperty="d_num" resultType="Integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+        insert into dance
+        values (null,#{d_title},#{d_contents},#{d_id},default,default)
+    </insert>
+    <insert id="insertFile" parameterType="danceFileDto">
+        insert into dancefile
+        values (null,#{df_dnum},#{df_oriname},#{df_sysname})
+    </insert>
+    <insert id="insertReply" parameterType="ReplyDto" useGeneratedKeys="true"
+    keyProperty="r_num">
+        <selectKey keyProperty="r_num" resultType="Integer" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+            insert into reply
+            values (null,#{r_dnum},#{r_contents},#{r_id},default)
+    </insert>
+    <insert id="insertImageFile" parameterType="DanceImgFileDto">
+        insert into imagefile
+        values (null,#{if_dnum},#{if_oriname},#{if_sysname})
+    </insert>
+    <update id="correction" parameterType="DanceDto">
+        update dance
+        set d_title=#{d_title},d_contents=#{d_contents}
+        where d_num=#{d_num}
+    </update>
+    <update id="updateViewPoint" parameterType="DanceDto">
+        update dance
+        set d_views=#{d_views}
+        where d_num=#{d_num}
+    </update>
+    <update id="updateReplyForm" parameterType="ReplyDto">
+        update reply
+        set r_contents=#{r_contents}
+        where r_num=#{r_num}
+    </update>
+    <delete id="deleteDance" parameterType="Integer">
+        delete from dance where d_num=#{d_num}
+    </delete>
+    <delete id="deleteFiles" parameterType="Integer">
+        delete from dancefile where df_dnum=#{d_num}
+    </delete>
+    <delete id="deleteReplyList" parameterType="Integer">
+        delete from reply where r_dnum=#{d_num};
+    </delete>
+    <delete id="deleteFile" parameterType="String">
+        delete from dancefile where df_sysname=#{sysname};
+    </delete>
+    <delete id="deleteThum" parameterType="Integer">
+        delete from imagefile where if_dnum=#{d_num};
+    </delete>
+    <delete id="deleteReply" parameterType="Integer">
+        delete from reply where r_num=#{r_num}
+    </delete>
+
+    <select id="selectDanceList" resultType="danceDto" parameterType="SearchDto">
+        select * from dlist
+        <if test="colname != null and colname != ''">
+            where ${colname} like CONCAT('%',#{keyword},'%')
+        </if>
+        limit #{pageNum}, #{listCnt}
+    </select>
+    <select id="selectDanceCnt" resultType="Integer" parameterType="SearchDto">
+        select count(*) from dlist
+        <if test="colname != null and colname !=''">
+            where ${colname} like concat('%',#{keyword},'%')
+        </if>
+    </select>
+
+    <select id="selectDance" resultType="DanceDto" parameterType="Integer">
+        select * from dlist where d_num=#{d_num}
+    </select>
+    <select id="selectFileList" resultType="DanceFileDto" parameterType="Integer">
+        select * from dancefile where df_dnum=#{d_num}
+    </select>
+    <select id="selectFnameList" resultType="String" parameterType="Integer">
+        select df_sysname from dancefile where df_dnum=#{d_num}
+    </select>
+    <select id="selectReplyList" resultType="ReplyDto" parameterType="Integer">
+        select * from rlist where r_dnum=#{d_num}
+    </select>
+    <select id="selectLastReply" resultType="ReplyDto" parameterType="Integer">
+        select * from rlist where r_num=#{r_num}
+    </select>
+    <select id="selectImgFnameList" resultType="String" parameterType="Integer">
+        select if_sysname from imagefile where if_dnum=#{d_num}
+    </select>
+
+</mapper>

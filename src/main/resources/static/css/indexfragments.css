@@ -1,0 +1,260 @@
+* {
+    box-sizing: border-box;
+}
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+section{
+    flex: 1;
+}
+/*컨텐츠가 담길 너비*/
+.content {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1920px;
+}
+.gradebox{
+    border: solid 2px white;
+}
+.content_tag>a {
+    text-decoration: none;
+}
+.content_tag>a:link {
+    color: black;
+}
+.content_tag>a:visited {
+    color: black;
+}
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+.video-container {
+    position: absolute;
+    margin: auto;
+}
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+/*상단 바-------------------------------------------------------------*/
+.homebutton{
+    text-decoration: white;
+    color: white;
+}
+.main-button{
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border: white 2px;
+}
+.top-bar {
+    background-color: #2e2e2e;
+    color: #fff;
+    min-height: 58px;
+    line-height: 58px;
+}
+.top-left {
+    float: left !important;
+    text-align: left;
+    padding: 0px;
+    margin: 0px;
+    font-family: "비트로 인스파이어 TTF" ;
+}
+
+/*------------------------------------------------------------*/
+
+.top-center {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    font-family: "I AM A PLAYER" ;
+    font-size: 25px;
+}
+.top-center ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.top-center ul li a {
+    text-decoration: none;
+}
+.top-center ul li a:link {
+    color: white;
+
+}
+.top-center ul li a:visited {
+    color: #fff;
+}
+.top-center ul li a:hover {
+    color: #8c8c8c;
+}
+/*-------------------------------------------*/
+
+.logo {
+    margin-top: 4px;
+    margin-right: 5px;
+    width: 50px;
+    border-radius: 30px;
+}
+.top-right {
+   float: right !important;
+    text-align: right;
+}
+.top-right ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.top-right ul li {
+    float: left;
+}
+.top-right ul li a {
+    text-decoration: none;
+}
+.top-right ul li a:link {
+    color: white;
+}
+.top-right ul li a:visited {
+    color: #fff;
+}
+.top-right ul li a:hover {
+    color: #8c8c8c;
+}
+.suc {
+    display: none;
+}
+.bef {
+    display: block;
+}
+/*-------------------------------------------------------------*/
+
+/*하단바-------------------------------------------------------------*/
+.footer-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #5b5b5b;
+    color: #fff;
+    min-height: 58px;
+    line-height: 58px;
+    padding: 0px;
+}
+.footer-bar2 {
+    position: sticky;
+    bottom: 0;
+    margin-top: 2%;
+    left: 0;
+    width: 100%;
+    background-color: #5b5b5b;
+    color: #fff;
+    min-height: 58px;
+    line-height: 58px;
+}
+
+.fcontents {
+    text-align: center;
+    padding: 0px;
+}
+.footer-logo {
+    width: 30px;
+    border-radius: 5px;
+}
+.footer-logo, .footer-txt {
+    margin: 0px auto;
+    vertical-align: middle;
+}
+/*-------------------------------------------------------------*/
+
+/*텍스트의 위치*/
+.typewriter {
+    text-align: center;
+    color: white;
+    margin-top: 20%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 50%;
+}
+/*텍스트의 효과*/
+.typingtext {
+    font-family: "ONE 모바일고딕 Title";
+    font-size: xxx-large;
+    text-shadow: 1px 1px 5px black;
+    color: white;
+    cursor: text;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: auto;
+    letter-spacing: .1em;
+}
+#scroll-indicator {
+    position: fixed;
+    bottom: 10px; /* 원하는 거리로 조정 가능 */
+    left: 50%;
+    transform: translateX(-60%);
+    color: white;
+    font-family: "KOHI나눔 Bold";
+    font-size: large;
+}
+.hidden {
+    display: none;
+}
+.content-home {
+    margin-top: 3%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 6%;
+}
+.bx-wrapper {
+    margin: 0px auto;
+}
+#topButton {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/*모바일 크기-------------------------------------------------------------*/
+@media only screen and (max-width: 300px) {
+    .content {
+        max-width: 100%;
+    }
+
+    .top-home {
+        display: none;
+    }
+}
+/*-------------------------------------------------------------*/

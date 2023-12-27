@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" , initial-scale="1">
+    <title>fragments</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/indexfragments.css">
+</head>
+<body>
+<div th:fragment="header(member)" class="top-bar">
+    <div class="content">
+        <a href="/" class="main-button">
+            <img src="images/AD-logo.jpg" alt="로고" class="top-left logo" onclick="gohome()">
+            <h2 class="top-left">ALL DANCE</h2>
+        </a>
+        <nav class="top-center">
+            <ul>
+                <th:block th:unless="${member == null}">
+                    <li><a th:href="@{danceList}">Show Your Dance!</a></li>
+                </th:block>
+            </ul>
+        </nav>
+        <nav class="top-right">
+            <ul>
+                <th:block th:if="${member == null}">
+                    <li><a th:href="@{loginForm}">✔️로그인</a></li>
+                    <li>&nbsp|&nbsp</li>
+                    <li><a th:href="@{joinForm}">🧾️회원가입</a></li>
+                </th:block>
+                <th:block th:unless="${member == null}">
+                    <li th:text="'세상의 모든 춤 (' + ${member.m_name} + ')님과 함께'"></li>
+                    <li>&nbsp|&nbsp</li>
+                    <li><a th:href="@{logout}">❌로그아웃</a></li>
+                </th:block>
+            </ul>
+        </nav>
+
+    </div>
+</div>
+<div th:fragment="footer" class="footer-bar">
+    <div class="content">
+        <div class="fcontents">
+            <img src="images/AD-logo.jpg" alt="footer-logo" class="footer-logo">
+            <span class="footer-txt">
+                &copy;All Dance Crew Platform
+            </span>
+        </div>
+    </div>
+</div>
+<div th:fragment="footer2" class="footer-bar2">
+    <div class="content">
+        <div class="fcontents">
+            <img src="images/AD-logo.jpg" alt="footer-logo" class="footer-logo">
+            <span class="footer-txt">
+                &copy;All Dance Crew Platform
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function toggleMenu() {
+        var menuContainer = document.querySelector('.menu-container');
+        menuContainer.classList.toggle('active');
+    }
+</script>
+</html>

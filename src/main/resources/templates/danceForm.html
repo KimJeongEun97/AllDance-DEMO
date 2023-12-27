@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" , initioal-scale="1">
+    <title>Dance Board</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/indexfragments.css">
+    <link rel="stylesheet" href="css/danceForm.css">
+    <script th:inline="javascript">
+        $(function () {
+            //메시지 출력
+            let m = [[${msg}]];
+            if (m != null) {
+                alert(m);
+            } //복사하여 index.html에도 넣기
+        });
+    </script>
+</head>
+<body class="danceFormbackground">
+<header>
+    <th:block th:insert="~{fragments::header(${session.member})}"/>
+</header>
+<section>
+    <div class="content">
+        <form th:action="@{danceProc}" class="write-form" method="post"
+              enctype="multipart/form-data" onclick="check()">
+            <h2 class="login-header" style="color: white">원하는 혹은 멋있는 춤을 공유해주세요!</h2>
+            <!-- 제목, 내용, 파일, 작성자(로그인 한 id)-->
+            <input type="hidden" name="d_id" th:value="${session.member.m_id}">
+            <input type="text" class="write-input" name="d_title" autofocus placeholder="제목" required>
+            <div class="filebox">
+                <label for="file" style="text-align: center">업로드</label>
+                <input type="file" name="files" id="file">
+                <input type="text" class="upload-name" value="영상을 넣어주세요." readonly>
+            </div>
+            <div class="filebox2">
+                <label for="imgfile" style="text-align: center">업로드</label>
+                <input type="file" name="imgfiles" id="imgfile">
+                <input type="text" class="imgupload-name" value="섬네일을 넣어주세요." readonly>
+            </div>
+            <textarea rows="10" name="d_contents" placeholder="내용을 적어주세요." class="write-input ta" required></textarea>
+            <div class="boardForm_btn-area">
+                <input type="submit" class="login-btn" value="생성" onclick="danceinput()">
+                <input type="reset" class="login-btn" value="리셋" onclick="danceinput()">
+                <input type="button" class="login-btn" id="backbtn" value="취소">
+            </div>
+        </form>
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{fragments::footer}"/>
+</footer>
+</body>
+<script th:inline="javascript">
+    //파일명 처리용 함수
+    $("#file").on("change", function (){
+        //파일 선택창에서 업로드할 파일을 선택한 다음
+        //'열기' 버튼을 누르면 change 이벤트가 발생.
+        // console.log($("#file"));
+        let files = $("#file")[0].files;
+        console.log(files);
+
+        let fileName = ""; //출력할 문장 저장 변수
+
+        if (files.length > 1){ //파일이 하나 이상일 때
+            fileName =`${files[0].name} 외 ${files.length - 1}개`;
+        }else if (files.length == 1){ //파일이 하나일 때
+            fileName = files[0].name;
+        }else {
+            fileName = "파일선택";
+        }
+        $(".upload-name").val(fileName);
+    });
+
+    //섬네일 이미지 파일명 처리용 함수
+    $("#imgfile").on("change", function (){
+        //파일 선택창에서 업로드할 파일을 선택한 다음
+        //'열기' 버튼을 누르면 change 이벤트가 발생.
+        // console.log($("#file"));
+        let files = $("#imgfile")[0].files;
+        console.log(files);
+
+        let imgfileName = ""; //출력할 문장 저장 변수
+
+        if (files.length > 1){ //파일이 하나 이상일 때
+            imgfileName =`${files[0].name} 외 ${files.length - 1}개`;
+        }else if (files.length == 1){ //파일이 하나일 때
+            imgfileName = files[0].name;
+        }else {
+            imgfileName = "파일선택";
+        }
+        $(".imgupload-name").val(imgfileName);
+    });
+
+    function danceinput() {
+        let dance = $("#dance").val();
+        //내용을 입력했는지 검사.
+        if (dance == "") {//입력을 안했으면
+            alert("내용을 입력하세요.");
+            $("#dance").focus();
+            return;
+        }
+    }
+    function check() {
+        //form 태그의 내용을 확인(누락된 부분)
+        console.dfrm = document.dForm//js에서 form태그를 통째로 가져오는 형식
+        console.log(dfrm);
+        let length = dfrm.length - 3;//생성 취소 리셋 버튼 제외
+        for (let i = 0; i < length; i++) {
+            if (dfrm[i].value == "" || dfrm[i].value == null) {
+                alert(`${dfrm[i].title} 입력하세요!`);
+                dfrm[i].focus();
+                return false;
+            }
+        }
+        return true;
+    }
+    $("#backbtn").click(function backbtn(){
+        let url = "/danceList?";
+        const searchDto = [[${session.sdto}]];
+        let  colname = "";
+        let keyword = "";
+        if (searchDto != null){
+            colname = searchDto.colname;
+            keyword = searchDto.keyword;
+        }
+        let page = [[${session.pageNum}]];
+
+        if (colname == null || colname == ""){ //검색 안한 목록 이동
+            url += `pageNum=${page}`;
+        }else { //검색한 결과 목록으로 이동.
+            url += `colname=${colname}&keyword=${keyword}&&pageNum=${page}`;
+        }
+        console.log(url);
+        location.href = url;
+    });
+</script>
+</html>

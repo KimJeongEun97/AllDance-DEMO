@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" , initioal-scale="1">
+    <title>Dance Board</title>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="css/indexfragments.css">
+    <link rel="stylesheet" href="css/danceDetail.css">
+    <link rel="stylesheet" href="css/reply.css">
+    <script th:inline="javascript">
+        $(function () {
+            //메시지 출력
+            let m = [[${msg}]];
+            if (m != null) {
+                alert(m);
+            } //복사하여 index.html에도 넣기
+        });
+    </script>
+</head>
+<body class="danceDetailbackground">
+<header>
+    <th:block th:insert="~{fragments::header(${session.member})}"/>
+</header>
+<section>
+    <div class="detailmaincontent">
+        <div class="write-form">
+            <h1 class="login-header" style="color: white; font-family: 'ONE 모바일고딕 Title'">Show On</h1>
+            <div>
+                <div class="t_content p-15 content_h" style="border-radius: 10px 0 0 0">TITLE</div>
+                <div class="d_content p-50 content_h" th:text="${dance.d_title}"></div>
+                <div class="t_content p-10 content_h">DATE</div>
+                <div class="d_content p-25 content_h" th:text="${dance.d_date}" style="border-radius: 0 10px 0 0"></div>
+            </div>
+            <div>
+                <div class="t_content p-15 content_h">ID</div>
+                <div class="d_content p-50 content_h" th:text="${dance.d_id}"></div>
+                <div class="t_content p-10 content_h">VIEWS</div>
+                <div class="d_content p-25 content_h" th:text="${dance.d_views}"></div>
+            </div>
+            <div class="video_content p-100 preview_file_h" style="overflow: auto">
+                <th:block th:unless="${#lists.isEmpty(dfList)}">
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.jpg')}">
+                            <img th:src="@{upload/}+${fitem.df_sysname}" width="800">
+                        </th:block>
+                    </th:block>
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.png')}">
+                            <img th:src="@{upload/}+${fitem.df_sysname}" width="800">
+                        </th:block>
+                    </th:block>
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.gif')}">
+                            <img th:src="@{upload/}+${fitem.df_sysname}" width="800">
+                        </th:block>
+                    </th:block>
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.webp')}">
+                            <img th:src="@{upload/}+${fitem.df_sysname}" width="800">
+                        </th:block>
+                    </th:block>
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.mp4')}">
+                            <video width="800" height="auto" controls>
+                                <source th:src="@{upload/}+${fitem.df_sysname}" type="video/mp4">
+                            </video>
+                        </th:block>
+                    </th:block>
+                    <th:block th:each="fitem:${dfList}">
+                        <th:block th:if="${#strings.contains(fitem.df_oriname, '.avi')}">
+                            <video width="800" height="auto" controls>
+                                <source th:src="@{upload/}+${fitem.df_sysname}" type="video/avi">
+                            </video>
+                        </th:block>
+                    </th:block>
+                </th:block>
+            </div>
+            <div>
+                <div class="title_content p-15 title_content_h">CONTENTS</div>
+                <div class="detail_content p-85 content_detail"
+                     style="overflow:auto;" th:text="${dance.d_contents}"></div>
+            </div>
+        </div>
+    </div>
+    <!--첨부된 파일 보기-->
+    <div class="write-form">
+        </th:block>
+        <!--첨부된 파일 다운로드-->
+        <div class="file_content p-15 files_h" style="border-radius: 0 0 0 10px">FILES</div>
+        <div class="filedata_content p-85 files_h"
+             style="overflow: auto; border-radius: 0 0 10px 0; vertical-align: middle">
+            <th:block th:if="${#lists.isEmpty(dfList)}">
+                첨부된 파일이 없습니다
+            </th:block>
+            <th:block th:unless="${#lists.isEmpty(dfList)}">
+                <th:block th:each="fitem:${dfList}">
+                    <a style="padding-top: 5px"
+                       th:href="@{download(df_sysname=${fitem.df_sysname},df_oriname=${fitem.df_oriname})}">
+                        <span class="file-title" th:text="${fitem.df_oriname}"></span>
+                    </a>
+                </th:block>
+            </th:block>
+        </div>
+        <!--수정,삭제,돌아가기 버튼-->
+        <div class="boardDetail_btn-area">
+            <button class="login-btn" id="upbtn">수정</button>
+            <button class="login-btn" id="delbtn">삭제</button>
+            <button class="login-btn" id="backbtn">뒤로</button>
+        </div>
+        <div class="replyarea" style="margin-bottom: 10px">
+            <!--댓글 전송 부분-->
+            <form id="rform">
+                <input type="hidden" name="r_dnum" th:value="${dance.d_num}">
+                <input type="hidden" name="r_id" th:value="${session.member.m_id}">
+                <textarea name="r_contents" rows="2" class="replytxt ta"
+                          id="comment" placeholder="댓글을 적어주세요." style="margin-bottom: 30px"></textarea>
+                <input type="button" value="댓글" class="replybtn" id="rbtn">
+            </form>
+        </div>
+    </div>
+    <div class="write-form">
+        <!--댓글 출력 부분-->
+        <div class="replyarea2">
+            <div id="rSpace" class="rSpace">
+                <th:block th:unless="${#lists.isEmpty(rList)}">
+                    <th:block th:each="ritem:${rList}">
+                        <div class="t_content p-50 content_h" style="color: black; text-align: left"
+                             th:text="${ritem.r_id}"></div>
+                        <div class="smallout_content p-50 content_h"
+                             th:text="${#dates.format(ritem.r_date,'yyyy-MM-dd HH:mm:ss')}"></div>
+                        <div class="replyout_content p-100 content_h" th:text="${ritem.r_contents}"
+                             style="margin-bottom: 15px"></div>
+                        <div class="boardDetail_btn-area">
+                            <button class="login-btn" id="replyupbtn" th:onclick="replyUp([[${ritem.r_num}]])">수정</button>
+                            <button class="login-btn" id="replydelbtn" th:onclick="replyDel([[${ritem.r_num}]])">삭제</button>
+                        </div>
+                    </th:block>
+                </th:block>
+            </div>
+            <br>
+        </div>
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{fragments::footer2}"/>
+</footer>
+</body>
+<script th:inline="javascript">
+    //수정/삭제 버튼 숨기기
+    $("#upbtn").hide();
+    $("#delbtn").hide();
+    let mid = [[${session.member.m_id}]];//로그인한 ID
+    let did = [[${dance.d_id}]];//글 작성자 ID
+    if (mid == did) { //두 아이디가 같다면
+        $("#upbtn").show(); //수정 버튼이 보인다
+        $("#delbtn").show(); //삭제 버튼이 보인다
+    }
+
+
+
+    $("#backbtn").click(function backbtn() {
+        let url = "/danceList?";
+        const searchDto = [[${session.sdto}]];
+        let colname = "";
+        let keyword = "";
+        if (searchDto != null) {
+            colname = searchDto.colname;
+            keyword = searchDto.keyword;
+        }
+        let page = [[${session.pageNum}]];
+
+        if (colname == null || colname == "") { //검색 안한 목록 이동
+            url += `pageNum=${page}`;
+        } else { //검색한 결과 목록으로 이동.
+            url += `colname=${colname}&keyword=${keyword}&&pageNum=${page}`;
+        }
+        console.log(url);
+        location.href = url;
+    });
+
+    //게시글 삭제 버튼 스크립트
+    $("#delbtn").click(function () {
+        let con = confirm("게시글을 삭제하시겠습니까?");
+        if (con == true) {
+            let dnum = [[${dance.d_num}]];
+            location.href = `/danceDelete?d_num=${dnum}`;
+        }
+    });
+
+    //댓글 삭제 스크립트
+    function replyDel(rnum) {
+        let con = confirm("댓글을 삭제하시겠습니까?");
+        if (con == true) {
+            let dnum = [[${dance.d_num}]];
+            location.href = `/replyDelete?r_num=${rnum}&d_num=${dnum}`;
+        }
+    }
+    //댓글 수정 스크립트
+    function replyUp(rnum) {
+        let dnum = [[${dance.d_num}]];
+        location.href = `/updateReply?r_num=${rnum}&r_dnum=${dnum}`;
+    }
+
+    //게시글 수정 스크립트
+    $("#upbtn").click(function () {
+        let dnum = [[${dance.d_num}]];
+        location.href = `/correction?d_num=${dnum}`;
+    });
+
+
+
+    $("#rbtn").click(function () {
+        const rForm = $("#rform").serialize();
+
+        //restcontroller에 전송
+        $.ajax({
+            url: "replyInsert",
+            type: "post",
+            data: rForm,
+            success: function (res) {
+                console.log(res);
+                if (res != null) {
+                    let str = "";
+                    str += `
+                        <div class="t_content p-50 content_h" style="color: black; text-align: left">${res.r_id}</div>
+                        <div class="smallout_content p-50 content_h">${res.r_date}</div>
+                        <div class="replyout_content p-100 content_h" style="margin-bottom: 15px">${res.r_contents}</div>
+                        <div class="boardDetail_btn-area">
+                                <button class="login-btn" id="replyupbtn" onclick="replyUp(${res.r_num})">수정</button>
+                                <button class="login-btn" id="replydelbtn" onclick="replyDel(${res.r_num})">삭제</button>
+                        </div>
+                  `;
+                    $("#rSpace").prepend(str);
+                    $("#comment").val("");
+                } else {
+                    alert("댓글 저장 실패");
+                    $("#comment").val("");
+                    $("#comment").focus();
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                alert("댓글 저장 실패");
+            }
+        });
+    });
+    // 댓글 수정/삭제 버튼 숨기기
+    let rmid = [[${session.member.m_id}]];
+    let rid = [[${dance.d_id}]];
+
+    if (rmid.equals(rid)) {
+        $("#replyupbtn").show();
+        $("#replydelbtn").show();
+
+    } else {
+        $("#replyupbtn").hide();
+        $("#replydelbtn").hide();
+
+    }
+</script>
+</html>
